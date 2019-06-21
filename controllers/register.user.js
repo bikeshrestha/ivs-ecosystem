@@ -9,6 +9,7 @@ const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection
 const registerUser = async(req,res) => {
 
     try {
+
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
@@ -45,7 +46,7 @@ const registerUser = async(req,res) => {
         res.status(200).send('Successfully registered and enrolled admin user "user1" and imported it into the wallet')
     } catch (error) {
 
-        return res.status(500).send({error:"Error", message:"Failed to register user."})
+        return res.status(500).send(`Failed to register user "user1": ${error}`)
     }
 
 
