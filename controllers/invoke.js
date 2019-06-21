@@ -1,16 +1,10 @@
 const router = require("express").Router();
 
 
-const {
-    FileSystemWallet,
-    Gateway
-} = require('fabric-network');
-const fs = require('fs');
+const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 
-const ccpPath = path.resolve(`${__dirname}/../config/connection.json`);
-const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-const ccp = JSON.parse(ccpJSON);
+const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-org1.json');
 
 
 
@@ -31,7 +25,7 @@ const invoke = async (req, res) => {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, {
+        await gateway.connect(ccpPath, {
             wallet,
             identity: 'user1',
             discovery: {
@@ -43,13 +37,14 @@ const invoke = async (req, res) => {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
+        // const contract = network.getContract('service-req-handler');
+        const contract = network.getContract('billing');
 
         // Submit the specified transaction.
         // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
-        await contract.submitTransaction('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom');
-        return res.status(200).send('Transaction has been submitted');
+        await contract.submitTransaction('addBalance', 'Org1', '14');
+        res.status(200).send('Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
