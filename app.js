@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const config = require('./config/config')
 const ApiRouter = require('./routes/route')
+const expressValidator = require('express-validator')
+
 app.use(cors())
 
 app.use(bodyParser.json())
